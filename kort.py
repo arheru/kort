@@ -60,31 +60,37 @@ class Player(object):
             print "%s draws %s" % (self, deck.cards[-1])
             self.hand.append(deck.cards.pop())
 
+    def discard(self, card):
+        self.hand.remove(card)
+        print "%s discards %s." % (self, card)
+
     def pick_card(self):
         while True:
-            card_pick = raw_input()
+            key = raw_input()
             try:
-                card_pick = int(card_pick)
+                key = int(key)
             except:
                 print "Error: Choose a number between 1-%s" % len(self.hand)
                 continue
-            if card_pick not in range(len(self.hand)+1):
+            if key not in range(len(self.hand)+1):
                 print "Error: Only keys 1-%s are valid options. Try again." % len(self.hand)
                 continue
-            return card_pick
+            card = self.hand[key-1]
+            return card
 
     def choose_target(self):
         while True:
-            card_target = raw_input()
+            key = raw_input()
             try:
-                card_target = int(card_target)
+                key = int(key)
             except:
-                print "Error: Choose a number between 1-%s" % len(parent.players)
+                print "Error: Choose a number between 1-%s" % len(self.parent.players)
                 continue
-            if card_target not in range(len(self.hand)+1):
-                print "Error: Only keys 1-%s are valid options. Try again." % len(parent.players)
+            if key not in range(len(self.hand)+1):
+                print "Error: Only keys 1-%s are valid options. Try again." % len(self.parent.players)
                 continue
-            return card_target
+            target_player = self.parent.players[key-1]
+            return target_player
 
 class Game(object):
     """
@@ -122,11 +128,14 @@ class Game(object):
                 for player in self.players:
                     print "\n%s's turn!" % player
                     print "Your hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
-                    card_pick = player.pick_card()
-                    print "You pick %s." % player.hand[card_pick-1]
+                    card = player.pick_card()
+                    # card = player.hand[card_pick-1]
+                    print "You pick %s." % card
                     # Choose target and activate effect
                     print "Who do you want to the card to affect? Choose a player (number 1-%s), then press Enter." % len(self.players)
-                    card_target = player.choose_target()
+                    target = player.choose_target()
+                    card.activate(target)
+                    player.discard(card)
 
                 # End of game conditions
                 for player in self.players:
