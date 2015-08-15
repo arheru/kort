@@ -42,6 +42,8 @@ class Card(object):
         pass
 
     def choose_target(self, player):
+        if self.number_of_targets == None:
+            return None
         targets = []
         # "All" means all players including card's owner.
         players = self.parent.parent.players
@@ -77,13 +79,6 @@ class Card(object):
 class CardUpOne(Card):
     """
     """
-    # def __init__(self, parent, name):
-    #     """
-    #     """
-    #     self.parent = parent
-    #     self.name = name
-    #     self.number_of_targets = 1
-
     def activate(self, player, targets):
         """
         Increase one target player's position by 1.
@@ -96,13 +91,6 @@ class CardUpOne(Card):
 class CardDownOne(Card):
     """
     """
-    def __init__(self, parent, name):
-        """
-        """
-        self.parent = parent
-        self.name = name
-        self.number_of_targets = 1
-
     def activate(self, player, targets):
         """
         Decrease one target player's position by 1.
@@ -116,8 +104,6 @@ class CardAllUpOne(Card):
     """
     """
     def __init__(self, parent, name):
-        """
-        """
         self.parent = parent
         self.name = name
         self.number_of_targets = 'all'
@@ -135,8 +121,6 @@ class CardAllDownOne(Card):
     """
     """
     def __init__(self, parent, name):
-        """
-        """
         self.parent = parent
         self.name = name
         self.number_of_targets = 'all'
@@ -150,13 +134,62 @@ class CardAllDownOne(Card):
             target.position -= 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
+class CardOthersUpOne(Card):
+    """
+    """
+    def __init__(self, parent, name):
+        self.parent = parent
+        self.name = name
+        self.number_of_targets = 'others'
+
+    def activate(self, player, targets):
+        """
+        Increase all other players' positions by 1.
+        """
+        for target in targets:
+            old_position = target.position
+            target.position += 1
+            print "%s's position goes from %s to %s." % (target, old_position, target.position)
+
+class CardOthersDownOne(Card):
+    """
+    """
+    def __init__(self, parent, name):
+        self.parent = parent
+        self.name = name
+        self.number_of_targets = 'others'
+
+    def activate(self, player, targets):
+        """
+        Decrease all other players' positions by 1.
+        """
+        for target in targets:
+            old_position = target.position
+            target.position -= 1
+            print "%s's position goes from %s to %s." % (target, old_position, target.position)
+
+class CardApocalypseDownTwo(Card):
+    """
+    """
+    def __init__(self, parent, name):
+        self.parent = parent
+        self.name = name
+        self.number_of_targets = None
+
+    def activate(self, player, targets):
+        """
+        Decrease the Apocalypse's position by 2.
+        """
+        game = self.parent.parent
+        old_position = game.apocalypse_position
+        game.apocalypse_position -= 2
+        print "Apocalypse's position goes from %s to %s." % (old_position, game.apocalypse_position)
+
 
 class Player(object):
     """
     """
     def __init__(self, name, parent, position = 5):
-        """
-        """
         self.name = name
         self.parent = parent
         self.position = position
@@ -207,6 +240,8 @@ class Game(object):
         self.graveyard = []
         self.safety = []
         self.turn = 0
+        self.apocalypse_position = 0
+        self.goal_position = random.randint(15, 20)
 
     def __repr__(self):
         return self.name
@@ -217,27 +252,27 @@ class Game(object):
     def add_player(self, player):
         self.players.append(player)
 
-    def check_loss_conditions(self, apocalypse_position):
+    def check_loss_conditions(self):
         to_graveyard = []
         for player in self.players:
-            if player.position <= apocalypse_position:
+            if player.position <= self.apocalypse_position:
                 to_graveyard.append(player)
         for player in to_graveyard:
             self.players.remove(player)
             self.graveyard.append(player)
             print "%s is engulfed by the Apocalypse!" % player
-            print "graveyard is now", self.graveyard
+            # print "graveyard is now", self.graveyard
 
-    def check_win_conditions(self, goal_position):
+    def check_win_conditions(self):
         to_safety = []
         for player in self.players:
-            if player.position >= goal_position:
+            if player.position >= self.goal_position:
                 to_safety.append(player)
         for player in to_safety:
             self.players.remove(player)
             self.safety.append(player)
             print "%s escapes the Apocalypse!" % player
-            print "%s are now in safety" % self.safety
+            # print "%s are now in safety" % self.safety
 
     def run(self):
         while True:
@@ -247,19 +282,16 @@ class Game(object):
             # Player draws three cards
             for player in self.players:
                 player.draw(deck, 3)
-
-            # Turn loop
-            turn_number = 0
-            apocalypse_position = 0
-            goal_position = random.randint(15, 20)
+            
             visible_goal_position = 10
 
+            # Turn loop
             while True:
-                turn_number += 1
-                apocalypse_position += 1
+                self.turn += 1
+                self.apocalypse_position += 1
 
-                self.check_loss_conditions(apocalypse_position)
-                self.check_win_conditions(goal_position)
+                self.check_loss_conditions()
+                self.check_win_conditions()
                 if len(self.players) <= 0:
                     if self.safety:
                         print self.safety, "made it to safety."
@@ -269,21 +301,23 @@ class Game(object):
 
                 for player in self.players:
                     os.system('clear')
-                    print "Press Enter to begin %s's turn!" % player
-                    raw_input()
+                    # Uncomment to hide previous player's turn:
+                    # print "Press Enter to begin %s's turn!" % player
+                    # raw_input()
+
                     print "%s's turn!" % player
-                    print "\nTurn no %s\t\nCurrent players:" % turn_number
+                    print "\nTurn no %s\t\nCurrent players:" % self.turn
                     for p in self.players:
                         print "%s\t%s" % (p, p.position)
-                    print "\nThe Apocalypse is now at", apocalypse_position
+                    print "\nThe Apocalypse is now at", self.apocalypse_position
                     if player.position >= visible_goal_position and not player.goal_in_sight:
                         player.goal_in_sight = True
-                        print "You see safety at position %s" % goal_position
+                        print "\nYou see safety at position %s" % self.goal_position
                     while len(player.hand) < 3:
                         player.draw(deck, 1)
-                    print "Your hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
+                    print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
                     card = player.pick_card()
-                    print "You pick %s." % card
+                    print "\nYou pick %s." % card
                     target_list = card.choose_target(player)
                     card.activate(player, target_list)
                     player.discard(card)
@@ -297,25 +331,45 @@ if __name__ == "__main__":
     game = Game()
     deck = Deck('deck1', game)
     game.add_deck(Deck('deck1', game))
-    for i in range(25):
-        card_name = 'up1_0%s' % (i+1)
-        game.decks[0].cards.append(CardUpOne(deck, card_name))
 
-    for i in range(15):
-        card_name = 'down1_0%s' % (i+1)
-        game.decks[0].cards.append(CardDownOne(deck, card_name))
-
-    for i in range(10):
-        card_name = 'allup1_0%s' % (i+1)
-        game.decks[0].cards.append(CardAllUpOne(deck, card_name))
-
-    for i in range(9):
-        card_name = 'alldown1_0%s' % (i+1)
-        game.decks[0].cards.append(CardAllDownOne(deck, card_name))
-
-    for i in range(4):
+    number_of_players = 4
+    for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
         game.add_player(Player(player_name, game))
         print "Player %s enters the game!" % player_name
+
+    for i in range(number_of_players*20):
+        card_name = 'up1_0%s' % (i+1)
+        game.decks[0].cards.append(CardUpOne(deck, card_name))
+
+    for i in range(number_of_players*15):
+        card_name = 'down1_0%s' % (i+1)
+        game.decks[0].cards.append(CardDownOne(deck, card_name))
+
+    for i in range(number_of_players*12):
+        card_name = 'allup1_0%s' % (i+1)
+        game.decks[0].cards.append(CardAllUpOne(deck, card_name))
+
+    for i in range(number_of_players*8):
+        card_name = 'alldown1_0%s' % (i+1)
+        game.decks[0].cards.append(CardAllDownOne(deck, card_name))
+
+    for i in range(number_of_players*6):
+        card_name = 'othersup1_0%s' % (i+1)
+        game.decks[0].cards.append(CardOthersUpOne(deck, card_name))
+
+    for i in range(number_of_players*8):
+        card_name = 'othersdown1_0%s' % (i+1)
+        game.decks[0].cards.append(CardOthersDownOne(deck, card_name))
+
+    for i in range(number_of_players*10):
+        card_name = 'apocdown2_0%s' % (i+1)
+        game.decks[0].cards.append(CardApocalypseDownTwo(deck, card_name))
+
     game.run()
     sys.exit(0)
+
+    # Cards
+    # one player +1, the other -1 (shove past)
+    # Apocalypse +-1 (reroute)
+
