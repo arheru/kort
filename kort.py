@@ -27,11 +27,12 @@ class Deck(object):
 class Card(object):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         """
         """
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'Card'
         self.number_of_targets = 1
 
     def __repr__(self):
@@ -81,6 +82,12 @@ class Card(object):
 class CardUpOne(Card):
     """
     """
+    def __init__(self, parent, id):
+        self.parent = parent
+        self.id = id
+        self.name = 'Climb!'
+        self.number_of_targets = 1
+
     def activate(self, player, targets):
         """
         Increase one target player's position by 1.
@@ -93,6 +100,12 @@ class CardUpOne(Card):
 class CardDownOne(Card):
     """
     """
+    def __init__(self, parent, id):
+        self.parent = parent
+        self.id = id
+        self.name = 'Kick to the face!'
+        self.number_of_targets = 1
+
     def activate(self, player, targets):
         """
         Decrease one target player's position by 1.
@@ -105,9 +118,10 @@ class CardDownOne(Card):
 class CardAllUpOne(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'Everyone together!'
         self.number_of_targets = 'all'
 
     def activate(self, player, targets):
@@ -122,9 +136,10 @@ class CardAllUpOne(Card):
 class CardAllDownOne(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'Collapse!'
         self.number_of_targets = 'all'
 
     def activate(self, player, targets):
@@ -139,9 +154,10 @@ class CardAllDownOne(Card):
 class CardOthersUpOne(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = "Heroism!"
         self.number_of_targets = 'others'
 
     def activate(self, player, targets):
@@ -156,9 +172,10 @@ class CardOthersUpOne(Card):
 class CardOthersDownOne(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'Me first!'
         self.number_of_targets = 'others'
 
     def activate(self, player, targets):
@@ -173,9 +190,10 @@ class CardOthersDownOne(Card):
 class CardSkitteringDownTwo(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'Bait the Skittering'
         self.number_of_targets = None
 
     def activate(self, player, targets):
@@ -190,9 +208,10 @@ class CardSkitteringDownTwo(Card):
 class CardSkitteringUpOne(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'Sabotage!'
         self.number_of_targets = None
 
     def activate(self, player, targets):
@@ -207,9 +226,10 @@ class CardSkitteringUpOne(Card):
 class CardDiscardHand(Card):
     """
     """
-    def __init__(self, parent, name):
+    def __init__(self, parent, id):
         self.parent = parent
-        self.name = name
+        self.id = id
+        self.name = 'There must be another way...'
         self.number_of_targets = None
 
     def activate(self, player, targets):
@@ -268,12 +288,13 @@ class Player(object):
 
     def pick_card(self):
         while True:
-            print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (self.hand, len(self.hand))
+            # print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (self.hand, len(self.hand))
             print "\nYour hand:"
             i = 0
             for card in self.hand:
                 i += 1
                 print "%s: %s" % (i, card)
+            print "Pick a card (number 1-%s), then press Enter." % len(self.hand)
             key = raw_input()
             if key == '?':
                 self.examine_cards_in_hand()
@@ -397,40 +418,40 @@ if __name__ == "__main__":
         print "Player %s enters the game!" % player_name
 
     for i in range(number_of_players*10):
-        card_name = 'up1_%s' % (i+1)
-        game.decks[0].cards.append(CardUpOne(deck, card_name))
+        card_id = 'up1_%s' % (i+1)
+        game.decks[0].cards.append(CardUpOne(deck, card_id))
 
     for i in range(number_of_players*6):
-        card_name = 'down1_%s' % (i+1)
-        game.decks[0].cards.append(CardDownOne(deck, card_name))
+        card_id = 'down1_%s' % (i+1)
+        game.decks[0].cards.append(CardDownOne(deck, card_id))
 
     for i in range(number_of_players*6):
-        card_name = 'allup1_%s' % (i+1)
-        game.decks[0].cards.append(CardAllUpOne(deck, card_name))
+        card_id = 'allup1_%s' % (i+1)
+        game.decks[0].cards.append(CardAllUpOne(deck, card_id))
 
     for i in range(number_of_players*4):
-        card_name = 'alldown1_%s' % (i+1)
-        game.decks[0].cards.append(CardAllDownOne(deck, card_name))
+        card_id = 'alldown1_%s' % (i+1)
+        game.decks[0].cards.append(CardAllDownOne(deck, card_id))
 
     for i in range(number_of_players*3):
-        card_name = 'othersup1_%s' % (i+1)
-        game.decks[0].cards.append(CardOthersUpOne(deck, card_name))
+        card_id = 'othersup1_%s' % (i+1)
+        game.decks[0].cards.append(CardOthersUpOne(deck, card_id))
 
     for i in range(number_of_players*4):
-        card_name = 'othersdown1_%s' % (i+1)
-        game.decks[0].cards.append(CardOthersDownOne(deck, card_name))
+        card_id = 'othersdown1_%s' % (i+1)
+        game.decks[0].cards.append(CardOthersDownOne(deck, card_id))
 
     for i in range(number_of_players*1):
-        card_name = 'skitdown2_%s' % (i+1)
-        game.decks[0].cards.append(CardSkitteringDownTwo(deck, card_name))
+        card_id = 'skitdown2_%s' % (i+1)
+        game.decks[0].cards.append(CardSkitteringDownTwo(deck, card_id))
 
     for i in range(number_of_players*1):
-        card_name = 'skitup1_%s' % (i+1)
-        game.decks[0].cards.append(CardSkitteringUpOne(deck, card_name))
+        card_id = 'skitup1_%s' % (i+1)
+        game.decks[0].cards.append(CardSkitteringUpOne(deck, card_id))
 
     for i in range(number_of_players*1):
-        card_name = 'discardhand_%s' % (i+1)
-        game.decks[0].cards.append(CardDiscardHand(deck, card_name))
+        card_id = 'discardhand_%s' % (i+1)
+        game.decks[0].cards.append(CardDiscardHand(deck, card_id))
 
     game.run()
     sys.exit(0)
