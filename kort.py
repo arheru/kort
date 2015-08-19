@@ -251,9 +251,28 @@ class Player(object):
             self.hand.remove(card)
             print "%s discards %s." % (self, card)
 
-    def pick_card(self):
+    def examine_cards_in_hand(self):
+        print "Which card do you want to know about?"
         while True:
             key = raw_input()
+            try:
+                key = int(key)
+            except:
+                print "Error: Choose a number between 1-%s" % len(self.hand)
+                continue
+            if key not in range(1,len(self.hand)+1):
+                print "Error: Only keys 1-%s are valid options. Try again." % len(self.hand)
+                continue
+            print self.hand[key-1].activate.__doc__
+            return 
+
+    def pick_card(self):
+        while True:
+            print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (self.hand, len(self.hand))
+            key = raw_input()
+            if key == '?':
+                self.examine_cards_in_hand()
+                continue
             try:
                 key = int(key)
             except:
@@ -350,7 +369,7 @@ class Game(object):
                         print "\nYou see safety at position %s\n" % self.goal_position
                     while len(player.hand) < 3:
                         player.draw(deck, 1)
-                    print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
+                    # print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
                     card = player.pick_card()
                     print "\nYou pick %s." % card
                     target_list = card.choose_target(player)
@@ -367,46 +386,46 @@ if __name__ == "__main__":
     deck = Deck('deck1', game)
     game.add_deck(Deck('deck1', game))
 
-    number_of_players = 2
+    number_of_players = 4
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
         game.add_player(Player(player_name, game))
         print "Player %s enters the game!" % player_name
 
     for i in range(number_of_players*10):
-        card_name = 'up1_0%s' % (i+1)
+        card_name = 'up1_%s' % (i+1)
         game.decks[0].cards.append(CardUpOne(deck, card_name))
 
     for i in range(number_of_players*6):
-        card_name = 'down1_0%s' % (i+1)
+        card_name = 'down1_%s' % (i+1)
         game.decks[0].cards.append(CardDownOne(deck, card_name))
 
     for i in range(number_of_players*6):
-        card_name = 'allup1_0%s' % (i+1)
+        card_name = 'allup1_%s' % (i+1)
         game.decks[0].cards.append(CardAllUpOne(deck, card_name))
 
     for i in range(number_of_players*4):
-        card_name = 'alldown1_0%s' % (i+1)
+        card_name = 'alldown1_%s' % (i+1)
         game.decks[0].cards.append(CardAllDownOne(deck, card_name))
 
     for i in range(number_of_players*3):
-        card_name = 'othersup1_0%s' % (i+1)
+        card_name = 'othersup1_%s' % (i+1)
         game.decks[0].cards.append(CardOthersUpOne(deck, card_name))
 
     for i in range(number_of_players*4):
-        card_name = 'othersdown1_0%s' % (i+1)
+        card_name = 'othersdown1_%s' % (i+1)
         game.decks[0].cards.append(CardOthersDownOne(deck, card_name))
 
     for i in range(number_of_players*1):
-        card_name = 'apocdown2_0%s' % (i+1)
+        card_name = 'apocdown2_%s' % (i+1)
         game.decks[0].cards.append(CardApocalypseDownTwo(deck, card_name))
 
     for i in range(number_of_players*1):
-        card_name = 'apocup1_0%s' % (i+1)
+        card_name = 'apocup1_%s' % (i+1)
         game.decks[0].cards.append(CardApocalypseUpOne(deck, card_name))
 
     for i in range(number_of_players*1):
-        card_name = 'discardhand_0%s' % (i+1)
+        card_name = 'discardhand_%s' % (i+1)
         game.decks[0].cards.append(CardDiscardHand(deck, card_name))
 
     game.run()
