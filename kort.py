@@ -170,7 +170,7 @@ class CardOthersDownOne(Card):
             target.position -= 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardApocalypseDownTwo(Card):
+class CardSkitteringDownTwo(Card):
     """
     """
     def __init__(self, parent, name):
@@ -180,14 +180,14 @@ class CardApocalypseDownTwo(Card):
 
     def activate(self, player, targets):
         """
-        Decrease the Apocalypse's position by 2.
+        Decrease the Skittering's position by 2.
         """
         game = self.parent.parent
-        old_position = game.apocalypse_position
-        game.apocalypse_position -= 2
-        print "Apocalypse's position goes from %s to %s." % (old_position, game.apocalypse_position)
+        old_position = game.skittering_position
+        game.skittering_position -= 2
+        print "Skittering's position goes from %s to %s." % (old_position, game.skittering_position)
 
-class CardApocalypseUpOne(Card):
+class CardSkitteringUpOne(Card):
     """
     """
     def __init__(self, parent, name):
@@ -197,12 +197,12 @@ class CardApocalypseUpOne(Card):
 
     def activate(self, player, targets):
         """
-        Increase the Apocalypse's position by 1.
+        Increase the Skittering's position by 1.
         """
         game = self.parent.parent
-        old_position = game.apocalypse_position
-        game.apocalypse_position += 1
-        print "Apocalypse's position goes from %s to %s." % (old_position, game.apocalypse_position)
+        old_position = game.skittering_position
+        game.skittering_position += 1
+        print "Skittering's position goes from %s to %s." % (old_position, game.skittering_position)
 
 class CardDiscardHand(Card):
     """
@@ -269,6 +269,11 @@ class Player(object):
     def pick_card(self):
         while True:
             print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (self.hand, len(self.hand))
+            print "\nYour hand:"
+            i = 0
+            for card in self.hand:
+                i += 1
+                print "%s: %s" % (i, card)
             key = raw_input()
             if key == '?':
                 self.examine_cards_in_hand()
@@ -294,7 +299,7 @@ class Game(object):
         self.graveyard = []
         self.safety = []
         self.turn = 0
-        self.apocalypse_position = 0
+        self.skittering_position = 0
         self.visible_goal_position = 10
         self.goal_position = random.randint(15, 20)
 
@@ -310,12 +315,12 @@ class Game(object):
     def check_loss_conditions(self):
         to_graveyard = []
         for player in self.players:
-            if player.position <= self.apocalypse_position:
+            if player.position <= self.skittering_position:
                 to_graveyard.append(player)
         for player in to_graveyard:
             self.players.remove(player)
             self.graveyard.append(player)
-            print "%s is engulfed by the Apocalypse!" % player
+            print "%s is engulfed by the Skittering!" % player
         if to_graveyard:
             return True
 
@@ -327,7 +332,7 @@ class Game(object):
         for player in to_safety:
             self.players.remove(player)
             self.safety.append(player)
-            print "%s escapes the Apocalypse!" % player
+            print "%s escapes the Skittering!" % player
         if to_safety:
             return True
 
@@ -336,14 +341,14 @@ class Game(object):
             # Start game
             deck = self.decks[0]
             deck.shuffle()
-            # Player draws three cards
+            # Player draws four cards
             for player in self.players:
-                player.draw(deck, 3)
+                player.draw(deck, 4)
 
             # Turn loop
             while True:
                 self.turn += 1
-                self.apocalypse_position += 1
+                self.skittering_position += 1
 
                 loss = self.check_loss_conditions()
                 win = self.check_win_conditions()
@@ -364,12 +369,11 @@ class Game(object):
                     print "\nTurn no %s\t\nCurrent players:" % self.turn
                     for p in self.players:
                         print "%s\t%s" % (p, p.position)
-                    print "\nThe Apocalypse is now at %s" % self.apocalypse_position
+                    print "\nThe Skittering is now at %s" % self.skittering_position
                     if player.position >= self.visible_goal_position:
                         print "\nYou see safety at position %s\n" % self.goal_position
-                    while len(player.hand) < 3:
+                    while len(player.hand) < 4:
                         player.draw(deck, 1)
-                    # print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
                     card = player.pick_card()
                     print "\nYou pick %s." % card
                     target_list = card.choose_target(player)
@@ -417,12 +421,12 @@ if __name__ == "__main__":
         game.decks[0].cards.append(CardOthersDownOne(deck, card_name))
 
     for i in range(number_of_players*1):
-        card_name = 'apocdown2_%s' % (i+1)
-        game.decks[0].cards.append(CardApocalypseDownTwo(deck, card_name))
+        card_name = 'skitdown2_%s' % (i+1)
+        game.decks[0].cards.append(CardSkitteringDownTwo(deck, card_name))
 
     for i in range(number_of_players*1):
-        card_name = 'apocup1_%s' % (i+1)
-        game.decks[0].cards.append(CardApocalypseUpOne(deck, card_name))
+        card_name = 'skitup1_%s' % (i+1)
+        game.decks[0].cards.append(CardSkitteringUpOne(deck, card_name))
 
     for i in range(number_of_players*1):
         card_name = 'discardhand_%s' % (i+1)
@@ -432,5 +436,13 @@ if __name__ == "__main__":
     sys.exit(0)
 
     # Cards
-    # one player +1, the other -1 (shove past)
-    # Apocalypse +-1 (reroute)
+    # up1 ("Climb!")
+    # down1 ("Kick to the face!")
+    # allup1 ("Everyone together!")
+    # alldown1 ("Collapse!")
+    # othersup1 ("Heroism")
+    # othersdown1 ("Me first!")
+    # one player +1, the other -1 ("Shove past")
+    # Skittering -2 ("Bait the Skittering")
+    # Skittering +1 ("Sabotage!")
+    # Discard hand ("There must be another way...")
