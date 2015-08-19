@@ -1,6 +1,8 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
+### Clamber - Henrik Lysell 2015
+
 import random
 import sys
 import os
@@ -295,6 +297,8 @@ class Game(object):
             self.players.remove(player)
             self.graveyard.append(player)
             print "%s is engulfed by the Apocalypse!" % player
+        if to_graveyard:
+            return True
 
     def check_win_conditions(self):
         to_safety = []
@@ -305,6 +309,8 @@ class Game(object):
             self.players.remove(player)
             self.safety.append(player)
             print "%s escapes the Apocalypse!" % player
+        if to_safety:
+            return True
 
     def run(self):
         while True:
@@ -320,8 +326,8 @@ class Game(object):
                 self.turn += 1
                 self.apocalypse_position += 1
 
-                self.check_loss_conditions()
-                self.check_win_conditions()
+                loss = self.check_loss_conditions()
+                win = self.check_win_conditions()
                 if len(self.players) <= 0:
                     if self.safety:
                         print self.safety, "made it to safety."
@@ -332,16 +338,16 @@ class Game(object):
                 for player in self.players:
                     os.system('clear')
                     # Uncomment to hide previous player's turn:
-                    # print "Press Enter to begin %s's turn!" % player
-                    # raw_input()
+                    print "Press Enter to begin %s's turn!" % player
+                    raw_input()
 
                     print "%s's turn!" % player
                     print "\nTurn no %s\t\nCurrent players:" % self.turn
                     for p in self.players:
                         print "%s\t%s" % (p, p.position)
-                    print "\nThe Apocalypse is now at", self.apocalypse_position
+                    print "\nThe Apocalypse is now at %s" % self.apocalypse_position
                     if player.position >= self.visible_goal_position:
-                        print "\nYou see safety at position %s" % self.goal_position
+                        print "\nYou see safety at position %s\n" % self.goal_position
                     while len(player.hand) < 3:
                         player.draw(deck, 1)
                     print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (player.hand, len(player.hand))
