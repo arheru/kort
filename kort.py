@@ -342,7 +342,7 @@ if __name__ == "__main__":
         card_name = 'up1_0%s' % (i+1)
         game.decks[0].cards.append(CardUpOne(deck, card_name))
 
-    for i in range(number_of_players*15):
+    for i in range(number_of_players*12):
         card_name = 'down1_0%s' % (i+1)
         game.decks[0].cards.append(CardDownOne(deck, card_name))
 
@@ -350,7 +350,7 @@ if __name__ == "__main__":
         card_name = 'allup1_0%s' % (i+1)
         game.decks[0].cards.append(CardAllUpOne(deck, card_name))
 
-    for i in range(number_of_players*8):
+    for i in range(number_of_players*7):
         card_name = 'alldown1_0%s' % (i+1)
         game.decks[0].cards.append(CardAllDownOne(deck, card_name))
 
@@ -358,7 +358,7 @@ if __name__ == "__main__":
         card_name = 'othersup1_0%s' % (i+1)
         game.decks[0].cards.append(CardOthersUpOne(deck, card_name))
 
-    for i in range(number_of_players*8):
+    for i in range(number_of_players*7):
         card_name = 'othersdown1_0%s' % (i+1)
         game.decks[0].cards.append(CardOthersDownOne(deck, card_name))
 
@@ -373,3 +373,4 @@ if __name__ == "__main__":
     # one player +1, the other -1 (shove past)
     # Apocalypse +-1 (reroute)
 
+    # Game ends with deck stats. Number of cards.
