@@ -244,9 +244,10 @@ class CardDiscardHand(Card):
 class Player(object):
     """
     """
-    def __init__(self, name, parent, position = 5):
+    def __init__(self, name, role, parent, position = 5):
         self.name = name
         self.parent = parent
+        self.role = role
         self.position = position
         self.hand = []
 
@@ -387,6 +388,7 @@ class Game(object):
                     raw_input()
 
                     print "%s's turn!" % player
+                    print "Your role is", player.role
                     print "\nTurn no %s\t\nCurrent players:" % self.turn
                     for p in self.players:
                         print "%s\t%s" % (p, p.position)
@@ -414,7 +416,14 @@ if __name__ == "__main__":
     number_of_players = 4
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
-        game.add_player(Player(player_name, game))
+        role_index = random.randint(0,3)
+        if 0 <= role_index <= 1:
+            role = 'altruist'
+        if role_index == 2:
+            role = 'adventurer'
+        if role_index == 3:
+            role = 'sadist'
+        game.add_player(Player(player_name, role, game))
         print "Player %s enters the game!" % player_name
 
     for i in range(number_of_players*10):
