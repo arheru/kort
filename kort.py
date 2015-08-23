@@ -175,7 +175,7 @@ class CardOthersDownOne(Card):
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
-        self.name = 'Me first!'
+        self.name = "You're not going without me!"
         self.number_of_targets = 'others'
 
     def activate(self, player, targets):
@@ -193,7 +193,7 @@ class CardSkitteringDownTwo(Card):
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
-        self.name = 'Bait the Skittering'
+        self.name = 'Bait the Skittering!'
         self.number_of_targets = None
 
     def activate(self, player, targets):
@@ -229,7 +229,7 @@ class CardDiscardHand(Card):
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
-        self.name = 'There must be another way...'
+        self.name = 'There must be another way!'
         self.number_of_targets = None
 
     def activate(self, player, targets):
@@ -250,6 +250,7 @@ class Player(object):
         self.role = role
         self.position = position
         self.hand = []
+        self.history = []
 
     def __repr__(self):
         return self.name
@@ -268,7 +269,7 @@ class Player(object):
 
     def discard(self, card):
         if card in self.hand:
-            self.parent.decks[0].discard_pile.append(card)
+            self.parent.deck.discard_pile.append(card)
             self.hand.remove(card)
             print "%s discards %s." % (self, card)
 
@@ -311,25 +312,42 @@ class Player(object):
             card = self.hand[key-1]
             return card
 
+    def score(self):
+        score = 0
+        if self.role == 'hero':
+            for player in self.parent.safety:
+                # 3 for surviving, and 5 for each other player that survived.
+                if player == self:
+                    score += 3
+                else:
+                    score += 5
+            for card_tuple in player.history:
+                # 1 for each card positively affecting others.
+                card_name = card_tuple[0].name
+                target_list = card_tuple[1]
+                if card_name == 'Climb!' and self not in target_list:
+                    score  += 1
+                if card_name in ['Everyone together!', 'Heroism!', 'Bait the Skittering!']:
+                    score += 1
+        return score
+
+
 class Game(object):
     """
     """
-    def __init__(self, name = 'Game'):
+    def __init__(self, name):
         self.name = name
-        self.decks = []
+        self.deck = None
         self.players = []
         self.graveyard = []
         self.safety = []
         self.turn = 0
         self.skittering_position = 0
-        self.visible_goal_position = 10
-        self.goal_position = random.randint(15, 20)
+        self.visible_goal_position = 6
+        self.goal_position = random.randint(10, 11)
 
     def __repr__(self):
         return self.name
-
-    def add_deck(self, deck):
-        self.decks.append(deck)
 
     def add_player(self, player):
         self.players.append(player)
@@ -361,7 +379,7 @@ class Game(object):
     def run(self):
         while True:
             # Start game
-            deck = self.decks[0]
+            deck = self.deck
             deck.shuffle()
             # Player draws four cards
             for player in self.players:
@@ -372,13 +390,24 @@ class Game(object):
                 self.turn += 1
                 self.skittering_position += 1
 
-                loss = self.check_loss_conditions()
-                win = self.check_win_conditions()
+                for player in self.players:
+                    loss = self.check_loss_conditions()
+                    win = self.check_win_conditions()
+
                 if len(self.players) <= 0:
+                    os.system('clear')
                     if self.safety:
                         print self.safety, "made it to safety."
                     if self.graveyard:
                         print self.graveyard, "died! Remember them fondly."
+                    # Scoring, post-game
+                    print "\nEnd score:"
+                    for p in self.safety:
+                        score = p.score()
+                        print p, score
+                    for p in self.graveyard:
+                        score = p.score()
+                        print p, score
                     return False
 
                 for player in self.players:
@@ -401,26 +430,28 @@ class Game(object):
                     print "\nYou pick %s." % card
                     target_list = card.choose_target(player)
                     card.activate(player, target_list)
+                    player.history.append((card, target_list))
                     player.discard(card)
                     print "\nPress Enter to end turn."
                     raw_input()
-
             return False
 
 
 if __name__ == "__main__":
-    game = Game()
+    game = Game('game')
     deck = Deck('deck1', game)
-    game.add_deck(Deck('deck1', game))
+    game.deck = deck
+
+    global_discard_pile = True
 
     number_of_players = 4
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
-        role_index = random.randint(0,3)
+        role_index = random.randint(0,1)
         if 0 <= role_index <= 1:
-            role = 'altruist'
+            role = 'hero'
         if role_index == 2:
-            role = 'adventurer'
+            role = 'competitor'
         if role_index == 3:
             role = 'sadist'
         game.add_player(Player(player_name, role, game))
@@ -428,39 +459,39 @@ if __name__ == "__main__":
 
     for i in range(number_of_players*10):
         card_id = 'up1_%s' % (i+1)
-        game.decks[0].cards.append(CardUpOne(deck, card_id))
+        game.deck.cards.append(CardUpOne(deck, card_id))
 
     for i in range(number_of_players*6):
         card_id = 'down1_%s' % (i+1)
-        game.decks[0].cards.append(CardDownOne(deck, card_id))
+        game.deck.cards.append(CardDownOne(deck, card_id))
 
     for i in range(number_of_players*6):
         card_id = 'allup1_%s' % (i+1)
-        game.decks[0].cards.append(CardAllUpOne(deck, card_id))
+        game.deck.cards.append(CardAllUpOne(deck, card_id))
 
     for i in range(number_of_players*4):
         card_id = 'alldown1_%s' % (i+1)
-        game.decks[0].cards.append(CardAllDownOne(deck, card_id))
+        game.deck.cards.append(CardAllDownOne(deck, card_id))
 
     for i in range(number_of_players*3):
         card_id = 'othersup1_%s' % (i+1)
-        game.decks[0].cards.append(CardOthersUpOne(deck, card_id))
+        game.deck.cards.append(CardOthersUpOne(deck, card_id))
 
     for i in range(number_of_players*4):
         card_id = 'othersdown1_%s' % (i+1)
-        game.decks[0].cards.append(CardOthersDownOne(deck, card_id))
+        game.deck.cards.append(CardOthersDownOne(deck, card_id))
 
     for i in range(number_of_players*1):
         card_id = 'skitdown2_%s' % (i+1)
-        game.decks[0].cards.append(CardSkitteringDownTwo(deck, card_id))
+        game.deck.cards.append(CardSkitteringDownTwo(deck, card_id))
 
     for i in range(number_of_players*1):
         card_id = 'skitup1_%s' % (i+1)
-        game.decks[0].cards.append(CardSkitteringUpOne(deck, card_id))
+        game.deck.cards.append(CardSkitteringUpOne(deck, card_id))
 
     for i in range(number_of_players*1):
         card_id = 'discardhand_%s' % (i+1)
-        game.decks[0].cards.append(CardDiscardHand(deck, card_id))
+        game.deck.cards.append(CardDiscardHand(deck, card_id))
 
     game.run()
     sys.exit(0)
@@ -476,3 +507,4 @@ if __name__ == "__main__":
     # Skittering -2 ("Bait the Skittering")
     # Skittering +1 ("Sabotage!")
     # Discard hand ("There must be another way...")
+    # oneup1onedown1 ("Me first!")
