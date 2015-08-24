@@ -79,7 +79,7 @@ class Card(object):
             targets.append(players[key-1])
             return targets
 
-class CardUpOne(Card):
+class CardClimb(Card):
     """
     """
     def __init__(self, parent, id):
@@ -97,7 +97,7 @@ class CardUpOne(Card):
         target.position += 1
         print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardDownOne(Card):
+class CardKickInTheFace(Card):
     """
     """
     def __init__(self, parent, id):
@@ -115,7 +115,7 @@ class CardDownOne(Card):
         target.position -= 1
         print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardAllUpOne(Card):
+class CardEveryoneTogether(Card):
     """
     """
     def __init__(self, parent, id):
@@ -133,7 +133,7 @@ class CardAllUpOne(Card):
             target.position += 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardAllDownOne(Card):
+class CardCollapse(Card):
     """
     """
     def __init__(self, parent, id):
@@ -151,7 +151,28 @@ class CardAllDownOne(Card):
             target.position -= 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardOthersUpOne(Card):
+class CardMeFirst(Card):
+    """
+    """
+    def __init__(self, parent, id):
+        self.parent = parent
+        self.id = id
+        self.name = 'Me first!'
+        self.number_of_targets = 1
+
+    def activate(self, player, targets):
+        """
+        Increase own position by 1, but decrease target's position by one.
+        """
+        old_position = player.position
+        player.position += 1
+        print "%s's position goes from %s to %s." % (player, old_position, player.position)
+        target = targets[0]
+        old_position = target.position
+        target.position -= 1
+        print "%s's position goes from %s to %s." % (target, old_position, target.position)
+
+class CardHeroism(Card):
     """
     """
     def __init__(self, parent, id):
@@ -169,7 +190,7 @@ class CardOthersUpOne(Card):
             target.position += 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardOthersDownOne(Card):
+class CardNotWithoutMe(Card):
     """
     """
     def __init__(self, parent, id):
@@ -187,7 +208,7 @@ class CardOthersDownOne(Card):
             target.position -= 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardSkitteringDownTwo(Card):
+class CardBaitTheSkittering(Card):
     """
     """
     def __init__(self, parent, id):
@@ -205,7 +226,7 @@ class CardSkitteringDownTwo(Card):
         game.skittering_position -= 2
         print "Skittering's position goes from %s to %s." % (old_position, game.skittering_position)
 
-class CardSkitteringUpOne(Card):
+class CardSabotage(Card):
     """
     """
     def __init__(self, parent, id):
@@ -223,7 +244,7 @@ class CardSkitteringUpOne(Card):
         game.skittering_position += 1
         print "Skittering's position goes from %s to %s." % (old_position, game.skittering_position)
 
-class CardDiscardHand(Card):
+class CardThereMustBeAnotherWay(Card):
     """
     """
     def __init__(self, parent, id):
@@ -343,7 +364,7 @@ class Player(object):
                 target_list = card_tuple[1]
                 if card_name == "Kick to the face!" and self not in target_list:
                     score  += 2
-                if card_name in ["Collapse!", "You're not going without me!"]:
+                if card_name in ["Collapse!", "Me first!", "You're not going without me!"]:
                     score += 2
                 # 3 for advancing the Skittering.
                 if card_name == "Sabotage!":
@@ -362,8 +383,8 @@ class Game(object):
         self.safety = []
         self.turn = 0
         self.skittering_position = 0
-        self.visible_goal_position = 6
-        self.goal_position = random.randint(10, 11)
+        self.visible_goal_position = 10
+        self.goal_position = random.randint(15, 20)
 
     def __repr__(self):
         return self.name
@@ -477,40 +498,44 @@ if __name__ == "__main__":
         print "Player %s enters the game!" % player_name
 
     for i in range(number_of_players*10):
-        card_id = 'up1_%s' % (i+1)
-        game.deck.cards.append(CardUpOne(deck, card_id))
+        card_id = 'climb1_%s' % (i+1)
+        game.deck.cards.append(CardClimb(deck, card_id))
 
     for i in range(number_of_players*6):
-        card_id = 'down1_%s' % (i+1)
-        game.deck.cards.append(CardDownOne(deck, card_id))
+        card_id = 'kick1_%s' % (i+1)
+        game.deck.cards.append(CardKickInTheFace(deck, card_id))
 
-    for i in range(number_of_players*6):
-        card_id = 'allup1_%s' % (i+1)
-        game.deck.cards.append(CardAllUpOne(deck, card_id))
+    for i in range(number_of_players*5):
+        card_id = 'everyone1_%s' % (i+1)
+        game.deck.cards.append(CardEveryoneTogether(deck, card_id))
 
     for i in range(number_of_players*4):
-        card_id = 'alldown1_%s' % (i+1)
-        game.deck.cards.append(CardAllDownOne(deck, card_id))
+        card_id = 'collapse1_%s' % (i+1)
+        game.deck.cards.append(CardCollapse(deck, card_id))
+
+    for i in range(number_of_players*6):
+        card_id = 'mefirst1_%s' % (i+1)
+        game.deck.cards.append(CardMeFirst(deck, card_id))
 
     for i in range(number_of_players*3):
-        card_id = 'othersup1_%s' % (i+1)
-        game.deck.cards.append(CardOthersUpOne(deck, card_id))
+        card_id = 'heroism1_%s' % (i+1)
+        game.deck.cards.append(CardHeroism(deck, card_id))
 
     for i in range(number_of_players*4):
-        card_id = 'othersdown1_%s' % (i+1)
-        game.deck.cards.append(CardOthersDownOne(deck, card_id))
+        card_id = 'notwithoutme1_%s' % (i+1)
+        game.deck.cards.append(CardNotWithoutMe(deck, card_id))
 
     for i in range(number_of_players*1):
-        card_id = 'skitdown2_%s' % (i+1)
-        game.deck.cards.append(CardSkitteringDownTwo(deck, card_id))
+        card_id = 'baittheskittering2_%s' % (i+1)
+        game.deck.cards.append(CardBaitTheSkittering(deck, card_id))
 
     for i in range(number_of_players*1):
-        card_id = 'skitup1_%s' % (i+1)
-        game.deck.cards.append(CardSkitteringUpOne(deck, card_id))
+        card_id = 'sabotage1_%s' % (i+1)
+        game.deck.cards.append(CardSabotage(deck, card_id))
 
     for i in range(number_of_players*1):
-        card_id = 'discardhand_%s' % (i+1)
-        game.deck.cards.append(CardDiscardHand(deck, card_id))
+        card_id = 'anotherway_%s' % (i+1)
+        game.deck.cards.append(CardThereMustBeAnotherWay(deck, card_id))
 
     game.run()
     sys.exit(0)
