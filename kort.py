@@ -338,11 +338,11 @@ class Player(object):
                 if player != self:
                     score += 5
             for card_tuple in self.history:
-                # 1 for each card negatively affecting others.
+                # 2 for each card negatively affecting others.
                 card_name = card_tuple[0].name
                 target_list = card_tuple[1]
                 if card_name == "Kick to the face!" and self not in target_list:
-                    score  += 1
+                    score  += 2
                 if card_name in ["Collapse!", "You're not going without me!"]:
                     score += 2
                 # 3 for advancing the Skittering.
