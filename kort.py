@@ -321,14 +321,33 @@ class Player(object):
                     score += 3
                 else:
                     score += 5
-            for card_tuple in player.history:
+            for card_tuple in self.history:
                 # 1 for each card positively affecting others.
                 card_name = card_tuple[0].name
                 target_list = card_tuple[1]
-                if card_name == 'Climb!' and self not in target_list:
+                if card_name == "Climb!" and self not in target_list:
                     score  += 1
-                if card_name in ['Everyone together!', 'Heroism!', 'Bait the Skittering!']:
+                if card_name in ["Everyone together!", "Heroism!", "Bait the Skittering!"]:
                     score += 1
+        if self.role == 'sadist':
+            # 5 for surviving.
+            if self in self.parent.safety:
+                score += 5
+            for player in self.parent.graveyard:
+                # 5 for each other player that died.
+                if player != self:
+                    score += 5
+            for card_tuple in self.history:
+                # 1 for each card negatively affecting others.
+                card_name = card_tuple[0].name
+                target_list = card_tuple[1]
+                if card_name == "Kick to the face!" and self not in target_list:
+                    score  += 1
+                if card_name in ["Collapse!", "You're not going without me!"]:
+                    score += 2
+                # 3 for advancing the Skittering.
+                if card_name == "Sabotage!":
+                    score += 3
         return score
 
 
@@ -447,12 +466,12 @@ if __name__ == "__main__":
     number_of_players = 4
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
-        role_index = random.randint(0,1)
+        role_index = random.randint(0,2)
         if 0 <= role_index <= 1:
             role = 'hero'
+        # if role_index == 2:
+        #     role = 'competitor'
         if role_index == 2:
-            role = 'competitor'
-        if role_index == 3:
             role = 'sadist'
         game.add_player(Player(player_name, role, game))
         print "Player %s enters the game!" % player_name
