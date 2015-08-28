@@ -284,6 +284,7 @@ class Player(object):
             # When deck is empty, the entire discard pile is shuffled into the deck.
             if not deck.cards:
                 deck.cards = deck.discard_pile
+                deck.discard_pile = []
                 deck.shuffle()
             print "%s draws %s" % (self, deck.cards[-1])
             self.hand.append(deck.cards.pop())
@@ -311,13 +312,12 @@ class Player(object):
 
     def pick_card(self):
         while True:
-            # print "\nYour hand is %s. Pick a card (number 1-%s), then press Enter." % (self.hand, len(self.hand))
             print "\nYour hand:"
             i = 0
             for card in self.hand:
                 i += 1
                 print "%s: %s" % (i, card)
-            print "Pick a card (number 1-%s), then press Enter." % len(self.hand)
+            print "Pick a card (number 1-%s), then press Enter. (\"?\" for card description)" % len(self.hand)
             key = raw_input()
             if key == '?':
                 self.examine_cards_in_hand()
@@ -495,45 +495,45 @@ if __name__ == "__main__":
         if role_index == 2:
             role = 'sadist'
         game.add_player(Player(player_name, role, game))
-        print "Player %s enters the game!" % player_name
+        print "Player %s enters the game! (%s)" % (player_name, role)
 
-    for i in range(number_of_players*10):
+    for i in range(10):
         card_id = 'climb1_%s' % (i+1)
         game.deck.cards.append(CardClimb(deck, card_id))
 
-    for i in range(number_of_players*6):
+    for i in range(6):
         card_id = 'kick1_%s' % (i+1)
         game.deck.cards.append(CardKickInTheFace(deck, card_id))
 
-    for i in range(number_of_players*5):
+    for i in range(5):
         card_id = 'everyone1_%s' % (i+1)
         game.deck.cards.append(CardEveryoneTogether(deck, card_id))
 
-    for i in range(number_of_players*4):
+    for i in range(4):
         card_id = 'collapse1_%s' % (i+1)
         game.deck.cards.append(CardCollapse(deck, card_id))
 
-    for i in range(number_of_players*6):
+    for i in range(6):
         card_id = 'mefirst1_%s' % (i+1)
         game.deck.cards.append(CardMeFirst(deck, card_id))
 
-    for i in range(number_of_players*3):
+    for i in range(3):
         card_id = 'heroism1_%s' % (i+1)
         game.deck.cards.append(CardHeroism(deck, card_id))
 
-    for i in range(number_of_players*4):
+    for i in range(4):
         card_id = 'notwithoutme1_%s' % (i+1)
         game.deck.cards.append(CardNotWithoutMe(deck, card_id))
 
-    for i in range(number_of_players*1):
-        card_id = 'baittheskittering2_%s' % (i+1)
+    for i in range(1):
+        card_id = 'bait2_%s' % (i+1)
         game.deck.cards.append(CardBaitTheSkittering(deck, card_id))
 
-    for i in range(number_of_players*1):
+    for i in range(1):
         card_id = 'sabotage1_%s' % (i+1)
         game.deck.cards.append(CardSabotage(deck, card_id))
 
-    for i in range(number_of_players*1):
+    for i in range(1):
         card_id = 'anotherway_%s' % (i+1)
         game.deck.cards.append(CardThereMustBeAnotherWay(deck, card_id))
 
