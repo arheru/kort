@@ -97,6 +97,24 @@ class CardClimb(Card):
         target.position += 1
         print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
+class CardSharpElbows(Card):
+    """
+    """
+    def __init__(self, parent, id):
+        self.parent = parent
+        self.id = id
+        self.name = 'Sharp elbows!'
+        self.number_of_targets = 1
+
+    def activate(self, player, targets):
+        """
+        Decrease one target player's position by 1.
+        """
+        target = targets[0]
+        old_position = target.position
+        target.position -= 1
+        print "%s's position goes from %s to %s." % (target, old_position, target.position)
+
 class CardKickInTheFace(Card):
     """
     """
@@ -108,11 +126,11 @@ class CardKickInTheFace(Card):
 
     def activate(self, player, targets):
         """
-        Decrease one target player's position by 1.
+        Decrease one target player's position by 2.
         """
         target = targets[0]
         old_position = target.position
-        target.position -= 1
+        target.position -= 2
         print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
 class CardEveryoneTogether(Card):
@@ -452,7 +470,7 @@ class Game(object):
 
                 for player in self.players:
                     os.system('clear')
-                    # Uncomment to hide previous player's turn:
+                    # Uncomment these 2 lines to hide previous player's turn:
                     print "Press Enter to begin %s's turn!" % player
                     raw_input()
 
@@ -484,7 +502,7 @@ if __name__ == "__main__":
 
     global_discard_pile = True
 
-    number_of_players = 4
+    number_of_players = 3
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
         role_index = random.randint(0,2)
@@ -502,10 +520,14 @@ if __name__ == "__main__":
         game.deck.cards.append(CardClimb(deck, card_id))
 
     for i in range(6):
-        card_id = 'kick1_%s' % (i+1)
+        card_id = 'elbows1_%s' % (i+1)
+        game.deck.cards.append(CardSharpElbows(deck, card_id))
+
+    for i in range(3):
+        card_id = 'kick2_%s' % (i+1)
         game.deck.cards.append(CardKickInTheFace(deck, card_id))
 
-    for i in range(5):
+    for i in range(4):
         card_id = 'everyone1_%s' % (i+1)
         game.deck.cards.append(CardEveryoneTogether(deck, card_id))
 
@@ -517,7 +539,7 @@ if __name__ == "__main__":
         card_id = 'mefirst1_%s' % (i+1)
         game.deck.cards.append(CardMeFirst(deck, card_id))
 
-    for i in range(3):
+    for i in range(5):
         card_id = 'heroism1_%s' % (i+1)
         game.deck.cards.append(CardHeroism(deck, card_id))
 
@@ -525,11 +547,11 @@ if __name__ == "__main__":
         card_id = 'notwithoutme1_%s' % (i+1)
         game.deck.cards.append(CardNotWithoutMe(deck, card_id))
 
-    for i in range(1):
+    for i in range(2):
         card_id = 'bait2_%s' % (i+1)
         game.deck.cards.append(CardBaitTheSkittering(deck, card_id))
 
-    for i in range(1):
+    for i in range(2):
         card_id = 'sabotage1_%s' % (i+1)
         game.deck.cards.append(CardSabotage(deck, card_id))
 
@@ -539,16 +561,3 @@ if __name__ == "__main__":
 
     game.run()
     sys.exit(0)
-
-    # Cards
-    # up1 ("Climb!")
-    # down1 ("Kick to the face!")
-    # allup1 ("Everyone together!")
-    # alldown1 ("Collapse!")
-    # othersup1 ("Heroism")
-    # othersdown1 ("Me first!")
-    # one player +1, the other -1 ("Shove past")
-    # Skittering -2 ("Bait the Skittering")
-    # Skittering +1 ("Sabotage!")
-    # Discard hand ("There must be another way...")
-    # oneup1onedown1 ("Me first!")
