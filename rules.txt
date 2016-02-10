@@ -1,0 +1,83 @@
+CLAMBER - Henrik Lysell 2015-2016
+A card game for 3+ players. Race to the top! Step on your friends! Don't get engulfed by the Skittering!
+
+################# Setup
+
+- All players start on position 5.
+
+- The Skittering starts on position 0.
+
+- The deck consisting of 53 cards (Henrik: maybe 52?) is shuffled and set in the middle of the table.
+
+- Each player draws 4 cards.
+
+################# Gameplay
+
+- Played in turns. Players go clockwise around the table.
+
+- The Skittering increases its position by 1 at the start of every turn, and also at the very start of the game, i.e. turn 1 begins with the Skittering moving to position 1 from 0.
+
+- After the Skittering advances, win and loss conditions are checked. These conditions are as follows:
+        * Any players with a position equal or less than that of the Skittering dies.
+        * Any players with a position equal or greater than the goal position leaves the well.
+
+- When a player in any way and at any time reaches position 10 or more, that player sees the position of the goal.
+
+- Goal position is determined when the first player reaches position 10. That player rolls 1D6, memorises the result and covers the dice with e.g. a cup for other players to see when they reach position 10 or more. Goal position is at 14 + the result of the dice, i.e. 15-20.
+
+################# Cards:
+
+Climb!
+    Increase one target player's position by 1.
+
+Leap!
+    Increase one target player's position by 2.
+
+Sharp elbows!
+    Decrease one target player's position by 1.
+
+Kick in the face!
+    Decrease one target player's position by 2.
+
+Everyone together!
+    Increase all players' positions by 1.
+
+Collapse!
+    Decrease all players' positions by 1.
+
+Me first!
+    Increase own position by 1, and decrease target's position by one.
+
+Heroism!
+    Increase all other players' positions by 1.
+
+You're not going without me!
+    Decrease all other players' positions by 1.
+
+Bait the Skittering!
+    Decrease the Skittering's position by 2.
+
+Sabotage!
+    Increase the Skittering's position by 1.
+
+There must be another way!
+    Discards all cards in hand.
+
+
+################## # Poängsättning:
+* Hero:
+    - Antal spelare i mål (5p/spelare)
+    - Överleva (3p)
+    - Antal kort lagda som hjälper andra spelare (1p/kort)
+* Sadist:
+    - Överleva (5p)
+    - Antal döda spelare (5p/spelare)
+    - Antal Sabotage! lagda (3p/kort)
+    - Antal negativa kort lagda mot andra spelare (1p/kort)
+* Competitor:
+    - Överleva (5p)
+    - Ordning man kom i mål (1: 10p, 2:5, 3:2, 4:1)
+    - Marginal till nästa spelare i mål (2/steg)
+    - Marginal till the Skittering (11-steg till Skittering) (bättre ju närmare)
+
+Spelarna får prata med varandra och får bluffa hur mycket de vill.
