@@ -97,6 +97,24 @@ class CardClimb(Card):
         target.position += 1
         print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
+class CardLeap(Card):
+    """
+    """
+    def __init__(self, parent, id):
+        self.parent = parent
+        self.id = id
+        self.name = 'Leap!'
+        self.number_of_targets = 1
+
+    def activate(self, player, targets):
+        """
+        Increase one target player's position by 2.
+        """
+        target = targets[0]
+        old_position = target.position
+        target.position += 2
+        print "%s's position goes from %s to %s." % (target, old_position, target.position)
+
 class CardSharpElbows(Card):
     """
     """
@@ -121,7 +139,7 @@ class CardKickInTheFace(Card):
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
-        self.name = 'Kick to the face!'
+        self.name = 'Kick in the face!'
         self.number_of_targets = 1
 
     def activate(self, player, targets):
@@ -438,6 +456,7 @@ class Game(object):
         while True:
             # Start game
             deck = self.deck
+            cards_in_deck = len(deck.cards)
             deck.shuffle()
             # Player draws four cards
             for player in self.players:
@@ -484,6 +503,7 @@ class Game(object):
                         print "\nYou see safety at position %s\n" % self.goal_position
                     while len(player.hand) < 4:
                         player.draw(deck, 1)
+                    print "%s of %s cards remain in deck." % (len(deck.cards), cards_in_deck)
                     card = player.pick_card()
                     print "\nYou pick %s." % card
                     target_list = card.choose_target(player)
@@ -500,9 +520,7 @@ if __name__ == "__main__":
     deck = Deck('deck1', game)
     game.deck = deck
 
-    global_discard_pile = True
-
-    number_of_players = 3
+    number_of_players = 4
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
         role_index = random.randint(0,2)
@@ -518,6 +536,10 @@ if __name__ == "__main__":
     for i in range(10):
         card_id = 'climb1_%s' % (i+1)
         game.deck.cards.append(CardClimb(deck, card_id))
+
+    for i in range(5):
+        card_id = 'leap2_%s' % (i+1)
+        game.deck.cards.append(CardLeap(deck, card_id))
 
     for i in range(6):
         card_id = 'elbows1_%s' % (i+1)
@@ -555,7 +577,7 @@ if __name__ == "__main__":
         card_id = 'sabotage1_%s' % (i+1)
         game.deck.cards.append(CardSabotage(deck, card_id))
 
-    for i in range(1):
+    for i in range(2):
         card_id = 'anotherway_%s' % (i+1)
         game.deck.cards.append(CardThereMustBeAnotherWay(deck, card_id))
 

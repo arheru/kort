@@ -1,5 +1,5 @@
 CLAMBER - Henrik Lysell 2015-2016
-A card game for 3+ players. Race to the top! Step on your friends! Don't get engulfed by the Skittering!
+A card game for 3+ players. Race to the top! Step on your friends! Don't get engulfed by the horrible death that is the Skittering!
 
 ################# Setup
 
@@ -20,6 +20,8 @@ A card game for 3+ players. Race to the top! Step on your friends! Don't get eng
 - After the Skittering advances, win and loss conditions are checked. These conditions are as follows:
         * Any players with a position equal or less than that of the Skittering dies.
         * Any players with a position equal or greater than the goal position leaves the well.
+
+- Each player plays a card and puts the card's effect into play. Playing a card is mandatory, and no more than one card can be played per turn.
 
 - When a player in any way and at any time reaches position 10 or more, that player sees the position of the goal.
 
