@@ -9,6 +9,8 @@ A card game for 3+ players. Race to the top! Step on your friends! Don't get eng
 
 - The deck consisting of 53 cards (Henrik: maybe 52?) is shuffled and set in the middle of the table.
 
+- Roles are determined by drawing a card from a special deck of role cards. Each player keeps his or her role card face down until the end of the game, but he or she can look at the card at any time during play.
+
 - Each player draws 4 cards.
 
 ################# Gameplay
@@ -27,59 +29,59 @@ A card game for 3+ players. Race to the top! Step on your friends! Don't get eng
 
 - Goal position is determined when the first player reaches position 10. That player rolls 1D6, memorises the result and covers the dice with e.g. a cup for other players to see when they reach position 10 or more. Goal position is at 14 + the result of the dice, i.e. 15-20.
 
-################# Cards:
+################# Cards (no. in deck)
 
-Climb!
+Climb! (10)
     Increase one target player's position by 1.
 
-Leap!
+Leap! (5)
     Increase one target player's position by 2.
 
-Sharp elbows!
+Sharp elbows! (6)
     Decrease one target player's position by 1.
 
-Kick in the face!
+Kick in the face! (3)
     Decrease one target player's position by 2.
 
-Everyone together!
+Everyone together! (4)
     Increase all players' positions by 1.
 
-Collapse!
+Collapse! (4)
     Decrease all players' positions by 1.
 
-Me first!
+Me first! (6)
     Increase own position by 1, and decrease target's position by one.
 
-Heroism!
+Heroism! (5)
     Increase all other players' positions by 1.
 
-You're not going without me!
+You're not going without me! (4)
     Decrease all other players' positions by 1.
 
-Bait the Skittering!
+Bait the Skittering! (2)
     Decrease the Skittering's position by 2.
 
-Sabotage!
+Sabotage! (2)
     Increase the Skittering's position by 1.
 
-There must be another way!
+There must be another way! (2)
     Discards all cards in hand.
 
 
-################## # Poängsättning:
+################## Scoring
 * Hero:
-    - Antal spelare i mål (5p/spelare)
-    - Överleva (3p)
-    - Antal kort lagda som hjälper andra spelare (1p/kort)
+    - Number of other players that escaped (5p/player)
+    - Survival (3p)
+    - Number of cards the hero used to directly positively affect other players. (1p/card)
 * Sadist:
-    - Överleva (5p)
-    - Antal döda spelare (5p/spelare)
-    - Antal Sabotage! lagda (3p/kort)
-    - Antal negativa kort lagda mot andra spelare (1p/kort)
+    - Survival (5p)
+    - Number of dead other players (5p/player)
+    - Number of Sabotage! cards used by the sadist (3p/card)
+    - Number of cards the sadist used to directly negatively affect other players (Sabotage! excluded) (1p/card)
 * Competitor:
-    - Överleva (5p)
-    - Ordning man kom i mål (1: 10p, 2:5, 3:2, 4:1)
-    - Marginal till nästa spelare i mål (2/steg)
-    - Marginal till the Skittering (11-steg till Skittering) (bättre ju närmare)
+    - Survival (5p)
+    - The order in which the competitor escaped (1: 10p, 2:5, 3:2, 4:1, 5+:0)
+    - Margin to the next player to survive (2p/step)
+    - Margin to the Skittering (11p-steps to the Skittering) (the closer, the better...)
 
-Spelarna får prata med varandra och får bluffa hur mycket de vill.
+Players can speak among themselves and bluff as much as they please.
