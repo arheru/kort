@@ -10,6 +10,7 @@ A card game for 3+ players. Race to the top! Step on your friends! Don't get eng
 - The deck consisting of 53 cards (Henrik: maybe 52?) is shuffled and set in the middle of the table.
 
 - Roles are determined by drawing a card from a special deck of role cards. Each player keeps his or her role card face down until the end of the game, but he or she can look at the card at any time during play.
+    * Alternatively, players determine their own roles and jot down their own roles on pieces of paper, which is left face-down until the end of the game. All roles are revealed when the game is over. Role scoring rules should be memorized in this case.
 
 - Each player draws 4 cards.
 
@@ -28,6 +29,8 @@ A card game for 3+ players. Race to the top! Step on your friends! Don't get eng
 - When a player in any way and at any time reaches position 10 or more, that player sees the position of the goal.
 
 - Goal position is determined when the first player reaches position 10. That player rolls 1D6, memorises the result and covers the dice with e.g. a cup for other players to see when they reach position 10 or more. Goal position is at 14 + the result of the dice, i.e. 15-20.
+
+- Players can speak among themselves and bluff as much as they please (strictly non-mechanical bluffing, i.e. no shifting positions when noone's looking...)
 
 ################# Cards (no. in deck)
 
@@ -70,7 +73,7 @@ There must be another way! (2)
 
 ################## Scoring
 * Hero:
-    - Number of other players that escaped (5p/player)
+    - Number of other players who escaped (5p/player)
     - Survival (3p)
     - Number of cards the hero used to directly positively affect other players. (1p/card)
 * Sadist:
@@ -80,8 +83,11 @@ There must be another way! (2)
     - Number of cards the sadist used to directly negatively affect other players (Sabotage! excluded) (1p/card)
 * Competitor:
     - Survival (5p)
-    - The order in which the competitor escaped (1: 10p, 2:5, 3:2, 4:1, 5+:0)
-    - Margin to the next player to survive (2p/step)
+    - The order in which the competitor escaped, relative to other players (1: 15p, 2:10, 3:5, 4:2, 5+:0)
+    - Margin to the next player to survive (3p/step)
     - Margin to the Skittering (11p-steps to the Skittering) (the closer, the better...)
 
-Players can speak among themselves and bluff as much as they please.
+----- Notes ------
+- Different Skittering templates:
+    "Rolling advance" - 2 rounds down 1; 1 round up 5
+    "Tentative" - 1 round down 1; 1 round up 3

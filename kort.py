@@ -382,7 +382,7 @@ class Player(object):
                 # 1 for each card positively affecting others.
                 card_name = card_tuple[0].name
                 target_list = card_tuple[1]
-                if card_name == "Climb!" and self not in target_list:
+                if card_name in ["Climb!", "Leap!"] and self not in target_list:
                     score  += 1
                 if card_name in ["Everyone together!", "Heroism!", "Bait the Skittering!"]:
                     score += 1
@@ -398,7 +398,7 @@ class Player(object):
                 # 2 for each card negatively affecting others.
                 card_name = card_tuple[0].name
                 target_list = card_tuple[1]
-                if card_name == "Kick to the face!" and self not in target_list:
+                if card_name in ["Kick to the face!", "Sharp elbows!"] and self not in target_list:
                     score  += 2
                 if card_name in ["Collapse!", "Me first!", "You're not going without me!"]:
                     score += 2
@@ -520,7 +520,7 @@ if __name__ == "__main__":
     deck = Deck('deck1', game)
     game.deck = deck
 
-    number_of_players = 4
+    number_of_players = 3
     for i in range(number_of_players):
         player_name = 'p%s' % (i+1)
         role_index = random.randint(0,2)
