@@ -244,23 +244,23 @@ class CardNotWithoutMe(Card):
             target.position -= 1
             print "%s's position goes from %s to %s." % (target, old_position, target.position)
 
-class CardBaitTheSkittering(Card):
+class CardBaitTheEnd(Card):
     """
     """
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
-        self.name = 'Bait the Skittering!'
+        self.name = 'Bait the End!'
         self.number_of_targets = None
 
     def activate(self, player, targets):
         """
-        Decrease the Skittering's position by 2.
+        Decrease the End's position by 2.
         """
         game = self.parent.parent
-        old_position = game.skittering_position
-        game.skittering_position -= 2
-        print "Skittering's position goes from %s to %s." % (old_position, game.skittering_position)
+        old_position = game.end_position
+        game.end_position -= 2
+        print "End's position goes from %s to %s." % (old_position, game.end_position)
 
 class CardSabotage(Card):
     """
@@ -273,12 +273,12 @@ class CardSabotage(Card):
 
     def activate(self, player, targets):
         """
-        Increase the Skittering's position by 1.
+        Increase the End's position by 1.
         """
         game = self.parent.parent
-        old_position = game.skittering_position
-        game.skittering_position += 1
-        print "Skittering's position goes from %s to %s." % (old_position, game.skittering_position)
+        old_position = game.end_position
+        game.end_position += 1
+        print "End's position goes from %s to %s." % (old_position, game.end_position)
 
 class CardThereMustBeAnotherWay(Card):
     """
@@ -384,7 +384,7 @@ class Player(object):
                 target_list = card_tuple[1]
                 if card_name in ["Climb!", "Leap!"] and self not in target_list:
                     score  += 1
-                if card_name in ["Everyone together!", "Heroism!", "Bait the Skittering!"]:
+                if card_name in ["Everyone together!", "Heroism!", "Bait the End!"]:
                     score += 1
         if self.role == 'sadist':
             # 5 for surviving.
@@ -402,7 +402,7 @@ class Player(object):
                     score  += 2
                 if card_name in ["Collapse!", "Me first!", "You're not going without me!"]:
                     score += 2
-                # 3 for advancing the Skittering.
+                # 3 for advancing the End.
                 if card_name == "Sabotage!":
                     score += 3
         return score
@@ -418,7 +418,7 @@ class Game(object):
         self.graveyard = []
         self.safety = []
         self.turn = 0
-        self.skittering_position = 0
+        self.end_position = 0
         self.visible_goal_position = 10
         self.goal_position = random.randint(15, 20)
 
@@ -431,12 +431,12 @@ class Game(object):
     def check_loss_conditions(self):
         to_graveyard = []
         for player in self.players:
-            if player.position <= self.skittering_position:
+            if player.position <= self.end_position:
                 to_graveyard.append(player)
         for player in to_graveyard:
             self.players.remove(player)
             self.graveyard.append(player)
-            print "%s is engulfed by the Skittering!" % player
+            print "%s is engulfed by the End!" % player
         if to_graveyard:
             return True
 
@@ -448,7 +448,7 @@ class Game(object):
         for player in to_safety:
             self.players.remove(player)
             self.safety.append(player)
-            print "%s escapes the Skittering!" % player
+            print "%s escapes the End!" % player
         if to_safety:
             return True
 
@@ -465,7 +465,7 @@ class Game(object):
             # Turn loop
             while True:
                 self.turn += 1
-                self.skittering_position += 1
+                self.end_position += 1
 
                 for player in self.players:
                     loss = self.check_loss_conditions()
@@ -498,7 +498,7 @@ class Game(object):
                     print "\nTurn no %s\t\nCurrent players:" % self.turn
                     for p in self.players:
                         print "%s\t%s" % (p, p.position)
-                    print "\nThe Skittering is now at %s" % self.skittering_position
+                    print "\nThe End is now at %s" % self.end_position
                     if player.position >= self.visible_goal_position:
                         print "\nYou see safety at position %s\n" % self.goal_position
                     while len(player.hand) < 4:
@@ -571,7 +571,7 @@ if __name__ == "__main__":
 
     for i in range(2):
         card_id = 'bait2_%s' % (i+1)
-        game.deck.cards.append(CardBaitTheSkittering(deck, card_id))
+        game.deck.cards.append(CardBaitTheEnd(deck, card_id))
 
     for i in range(2):
         card_id = 'sabotage1_%s' % (i+1)
